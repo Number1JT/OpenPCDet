@@ -1,0 +1,63 @@
+DATASET: 'WaymoDataset'
+DATA_PATH: '../data/waymo'
+
+POINT_CLOUD_RANGE: [-80, -80, -2.5, 80, 80, 2.5]
+
+DATA_SPLIT: {
+    'train': training,
+    'valid': validation,
+    'test': testing
+}
+
+INFO_PATH: {
+    'train': [waymo_infos_training.pkl],
+    'valid': [waymo_infos_validation.pkl],
+    'test': [waymo_infos_test.pkl],
+}
+
+FOV_POINTS_ONLY: False
+
+
+DATA_AUGMENTOR:
+    DISABLE_AUG_LIST: ['placeholder']
+    AUG_CONFIG_LIST:
+        - NAME: filter_by_min_points
+          POINTS_NUM: ['TYPE_VEHICLE:5', 'TYPE_PEDESTRIAN:5', 'TYPE_CYCLIST:5']
+
+        - NAME: filter_by_camera_fov
+          FOV: [-115.2, 115.2]
+
+        - NAME: random_world_flip
+          ALONG_AXIS_LIST: ['x','y']
+
+        - NAME: random_world_rotation
+          WORLD_ROT_ANGLE: [-0.78539816, 0.78539816]
+
+        - NAME: random_world_scaling
+          WORLD_SCALE_RANGE: [0.75, 1.25]
+
+
+POINT_FEATURE_ENCODING: {
+    encoding_type: absolute_coordinates_encoding,
+    used_feature_list: ['x', 'y', 'z', 'intensity', 'elongation', 'semantic', 'textureR', 'textureG', 'textureB', 'geometricU','geometricV', 'geometricOCX','geometricOCY','geometricOCZ'],
+    src_feature_list: ['x', 'y', 'z', 'intensity', 'elongation', 'semantic', 'textureR', 'textureG', 'textureB', 'geometricU','geometricV', 'geometricOCX','geometricOCY','geometricOCZ']
+}
+
+
+DATA_PROCESSOR:
+    - NAME: mask_points_and_boxes_outside_range
+      REMOVE_OUTSIDE_BOXES: True
+
+    - NAME: shuffle_points
+      SHUFFLE_ENABLED: {
+        'train': True,
+        'test': False
+      }
+
+    - NAME: transform_points_to_voxels
+      VOXEL_SIZE: [0.1, 0.1, 0.1]
+      MAX_POINTS_PER_VOXEL: 5
+      MAX_NUMBER_OF_VOXELS: {
+        'train': 160000,
+        'test': 160000
+      }

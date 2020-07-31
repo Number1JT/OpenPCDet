@@ -127,10 +127,10 @@ class DataBaseSampler(object):
 
         obj_points_list = []
         for idx, info in enumerate(total_valid_sampled_dict):
-            file_path = self.root_path / info['path']
-            obj_points = np.fromfile(str(file_path), dtype=np.float32).reshape(
-                [-1, self.sampler_cfg.NUM_POINT_FEATURES])
-
+            # file_path = self.root_path / info['path']
+            # obj_points = np.fromfile(str(file_path), dtype=np.float32).reshape(
+            #    [-1, self.sampler_cfg.NUM_POINT_FEATURES])
+            obj_points = info['gt_points']
             obj_points[:, :3] += info['box3d_lidar'][:3]
 
             if self.sampler_cfg.get('USE_ROAD_PLANE', False):
@@ -175,10 +175,10 @@ class DataBaseSampler(object):
                 sampled_dict = self.sample_with_fixed_number(class_name, sample_group)
 
                 sampled_boxes = np.stack([x['box3d_lidar'] for x in sampled_dict], axis=0).astype(np.float32)
-
-                if self.sampler_cfg.get('DATABASE_WITH_FAKELIDAR', False):
-                    sampled_boxes = box_utils.boxes3d_kitti_fakelidar_to_lidar(sampled_boxes)
-
+                # kitti lidar box is fake , need convert
+                #if self.sampler_cfg.get('DATABASE_WITH_FAKELIDAR', False):
+                #    sampled_boxes = box_utils.boxes3d_kitti_fakelidar_to_lidar(sampled_boxes)
+                
                 iou1 = iou3d_nms_utils.boxes_bev_iou_cpu(sampled_boxes[:, 0:7], existed_boxes[:, 0:7])
                 iou2 = iou3d_nms_utils.boxes_bev_iou_cpu(sampled_boxes[:, 0:7], sampled_boxes[:, 0:7])
                 iou2[range(sampled_boxes.shape[0]), range(sampled_boxes.shape[0])] = 0

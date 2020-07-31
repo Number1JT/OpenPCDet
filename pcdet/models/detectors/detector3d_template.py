@@ -251,7 +251,7 @@ class Detector3DTemplate(nn.Module):
             k -= 1
         cur_gt = cur_gt[:k + 1]
 
-        if cur_gt.sum() > 0:
+        if len(cur_gt)>0:
             if box_preds.shape[0] > 0:
                 iou3d_rcnn = iou3d_nms_utils.boxes_iou3d_gpu(box_preds, cur_gt[:, 0:7])
             else:

@@ -27,7 +27,7 @@ class DatasetTemplate(torch_data.Dataset):
         )
         self.data_augmentor = DataAugmentor(
             self.root_path, self.dataset_cfg.DATA_AUGMENTOR, self.class_names, logger=self.logger
-        ) if self.training else None
+        ) if self.training else None  # set Not None when want use filter_by_camera_fov and filter_by_min_points in inference/validation stage
         self.data_processor = DataProcessor(
             self.dataset_cfg.DATA_PROCESSOR, point_cloud_range=self.point_cloud_range, training=self.training
         )
@@ -112,7 +112,7 @@ class DatasetTemplate(torch_data.Dataset):
                 voxel_num_points: optional (num_voxels)
                 ...
         """
-        if self.training:
+        if self.training: # set True when want use filter_by_camera_fov and filter_by_min_points in inference/validation stage
             assert 'gt_boxes' in data_dict, 'gt_boxes should be provided for training'
             gt_boxes_mask = np.array([n in self.class_names for n in data_dict['gt_names']], dtype=np.bool_)
 
@@ -131,7 +131,10 @@ class DatasetTemplate(torch_data.Dataset):
             data_dict['gt_boxes'] = data_dict['gt_boxes'][selected]
             data_dict['gt_names'] = data_dict['gt_names'][selected]
             gt_classes = np.array([self.class_names.index(n) + 1 for n in data_dict['gt_names']], dtype=np.int32)
-            gt_boxes = np.concatenate((data_dict['gt_boxes'], gt_classes.reshape(-1, 1).astype(np.float32)), axis=1)
+            if gt_classes.size == 0:  # empty
+                gt_boxes = np.asarray([]).astype(np.float32).reshape(-1, 8)
+            else:
+                gt_boxes = np.concatenate((data_dict['gt_boxes'], gt_classes.reshape(-1, 1).astype(np.float32)), axis=1)
             data_dict['gt_boxes'] = gt_boxes
 
         data_dict = self.point_feature_encoder.forward(data_dict)
@@ -140,7 +143,7 @@ class DatasetTemplate(torch_data.Dataset):
             data_dict=data_dict
         )
         data_dict.pop('gt_names', None)
-
+        data_dict.pop('gt_boxes_points_num', None)
         return data_dict
 
     @staticmethod

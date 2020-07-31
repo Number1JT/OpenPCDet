@@ -27,6 +27,7 @@ def parse_config():
     parser.add_argument('--mgpus', action='store_true', default=False, help='whether to use multiple gpu')
     parser.add_argument('--launcher', choices=['none', 'pytorch', 'slurm'], default='none')
     parser.add_argument('--tcp_port', type=int, default=18888, help='tcp port for distrbuted training')
+    # parser.add_argument('--sync_bn', action='store_true', default=False, help='whether to use sync bn')
     parser.add_argument('--local_rank', type=int, default=0, help='local rank for distributed training')
     parser.add_argument('--set', dest='set_cfgs', default=None, nargs=argparse.REMAINDER,
                         help='set extra config keys if needed')
@@ -37,6 +38,8 @@ def parse_config():
     parser.add_argument('--eval_all', action='store_true', default=False, help='whether to evaluate all checkpoints')
     parser.add_argument('--ckpt_dir', type=str, default=None, help='specify a ckpt directory to be evaluated if needed')
     parser.add_argument('--save_to_file', action='store_true', default=False, help='')
+
+    parser.add_argument('--split', type=str, default='test', help='specify the split dataset')
 
     args = parser.parse_args()
 
@@ -175,10 +178,12 @@ def main():
         dataset_cfg=cfg.DATA_CONFIG,
         class_names=cfg.CLASS_NAMES,
         batch_size=args.batch_size,
-        dist=dist_test, workers=args.workers, logger=logger, training=False
+        dist=dist_test, workers=args.workers, logger=logger, training=False, split=args.split
     )
 
     model = build_network(model_cfg=cfg.MODEL, num_class=len(cfg.CLASS_NAMES), dataset=test_set)
+    # if args.sync_bn:
+    #     model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
     with torch.no_grad():
         if args.eval_all:
             repeat_eval_ckpt(model, test_loader, args, eval_output_dir, logger, ckpt_dir, dist_test=dist_test)

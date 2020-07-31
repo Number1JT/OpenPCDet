@@ -6,3 +6,5 @@ easydict
 pyyaml
 scikit-image
 tqdm
+opencv-python
+waymo-open-dataset-tf-2-1-0==1.2.0

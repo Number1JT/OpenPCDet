@@ -5,11 +5,13 @@ POINT_CLOUD_RANGE: [0, -40, -3, 70.4, 40, 1]
 
 DATA_SPLIT: {
     'train': train,
+    'valid': valid,
     'test': val
 }
 
 INFO_PATH: {
     'train': [kitti_infos_train.pkl],
+    'valid': [kitti_infos_valid.pkl],
     'test': [kitti_infos_val.pkl],
 }
 

@@ -97,10 +97,11 @@ def main():
         dist=dist_train, workers=args.workers,
         logger=logger,
         training=True,
+        split='train',
         merge_all_iters_to_one_epoch=args.merge_all_iters_to_one_epoch,
         total_epochs=args.epochs
     )
-
+    # train_set.__getitem__(5) # DEBUG
     model = build_network(model_cfg=cfg.MODEL, num_class=len(cfg.CLASS_NAMES), dataset=train_set)
     if args.sync_bn:
         model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
@@ -168,7 +169,7 @@ def main():
         dataset_cfg=cfg.DATA_CONFIG,
         class_names=cfg.CLASS_NAMES,
         batch_size=args.batch_size,
-        dist=dist_train, workers=args.workers, logger=logger, training=False
+        dist=dist_train, workers=args.workers, logger=logger, training=False, split='valid'
     )
     eval_output_dir = output_dir / 'eval' / 'eval_with_train'
     eval_output_dir.mkdir(parents=True, exist_ok=True)

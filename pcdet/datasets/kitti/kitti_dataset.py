@@ -8,7 +8,7 @@ from ...ops.roiaware_pool3d import roiaware_pool3d_utils
 
 
 class KittiDataset(DatasetTemplate):
-    def __init__(self, dataset_cfg, class_names, training=True, root_path=None, logger=None):
+    def __init__(self, dataset_cfg, class_names, training=True, split='train', root_path=None, logger=None):
         """
         Args:
             root_path:
@@ -20,21 +20,21 @@ class KittiDataset(DatasetTemplate):
         super().__init__(
             dataset_cfg=dataset_cfg, class_names=class_names, training=training, root_path=root_path, logger=logger
         )
-        self.split = self.dataset_cfg.DATA_SPLIT[self.mode]
-        self.root_split_path = self.root_path / ('training' if self.split != 'test' else 'testing')
+        self.split = self.dataset_cfg.DATA_SPLIT[split]
+        self.root_split_path = self.root_path / self.split
 
         split_dir = self.root_path / 'ImageSets' / (self.split + '.txt')
         self.sample_id_list = [x.strip() for x in open(split_dir).readlines()] if split_dir.exists() else None
 
         self.kitti_infos = []
-        self.include_kitti_data(self.mode)
+        self.include_kitti_data(split)
 
-    def include_kitti_data(self, mode):
+    def include_kitti_data(self, split):
         if self.logger is not None:
             self.logger.info('Loading KITTI dataset')
         kitti_infos = []
 
-        for info_path in self.dataset_cfg.INFO_PATH[mode]:
+        for info_path in self.dataset_cfg.INFO_PATH[split]:
             info_path = self.root_path / info_path
             if not info_path.exists():
                 continue
@@ -51,8 +51,8 @@ class KittiDataset(DatasetTemplate):
         super().__init__(
             dataset_cfg=self.dataset_cfg, class_names=self.class_names, training=self.training, root_path=self.root_path, logger=self.logger
         )
-        self.split = split
-        self.root_split_path = self.root_path / ('training' if self.split != 'test' else 'testing')
+        self.split = self.dataset_cfg.DATA_SPLIT[split]
+        self.root_split_path = self.root_path / self.split
 
         split_dir = self.root_path / 'ImageSets' / (self.split + '.txt')
         self.sample_id_list = [x.strip() for x in open(split_dir).readlines()] if split_dir.exists() else None

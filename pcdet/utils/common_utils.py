@@ -195,3 +195,27 @@ def merge_results_dist(result_part, size, tmpdir):
     ordered_results = ordered_results[:size]
     shutil.rmtree(tmpdir)
     return ordered_results
+
+
+def merge_results_dist_Objects(result_part, size, tmpdir):
+    from waymo_open_dataset.protos import metrics_pb2
+
+    rank, world_size = get_dist_info()
+    os.makedirs(tmpdir, exist_ok=True)
+
+    dist.barrier()
+    pickle.dump(result_part, open(os.path.join(tmpdir, 'result_part_{}.pkl'.format(rank)), 'wb'))
+    dist.barrier()
+
+    if rank != 0:
+        return None
+
+    part_list = []
+    for i in range(world_size):
+        part_file = os.path.join(tmpdir, 'result_part_{}.pkl'.format(i))
+        part_list.append(pickle.load(open(part_file, 'rb')))
+
+    total_objects = metrics_pb2.Objects()
+    for objects in part_list:
+        total_objects.MergeFrom(objects)
+    return total_objects
