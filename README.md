@@ -32,16 +32,17 @@ Testing
         'train': 160000,
         'test': 160000
       }
-<img src="docs/sparse2voxel_source.png" align="left" width="50%" name="sparse2voxel source">
-<img src="docs/sparse2voxel_after.png" align="right" width="50%" name="sparse2voxel after">
+<img src="docs/sparse2voxel_source.png" align="center" width="100%" name="sparse2voxel source">
+<img src="docs/sparse2voxel_after.png" align="center" width="100%" name="sparse2voxel after">
+
 
 ### Set abstraction + further point sampling
 Need to sample 10240 points to achieve better coverage of the obeject，there are average 40/8/15 points for Car/Pedestrian/Cyclist.
 More efficient sampling strategy to speed-up and enhance performance
 - [ ] filtering road-plane
 - [ ] feature+coordinate distance measurement 
-<img src="docs/set_abstraction2056.png" align="left" width="80%" name="sampling 2056 points">
-<img src="docs/set_abstraction10240.png" align="right" width="80%" name="sampling 10240 points">
+<img src="docs/set_abstraction2056.png" align="center" width="100%" name="sampling 2056 points">
+<img src="docs/set_abstraction10240.png" align="center" width="100%" name="sampling 10240 points">
 
 ### Time consuming of each module in second
 
@@ -57,16 +58,16 @@ More efficient sampling strategy to speed-up and enhance performance
     5:0.06638646125793457 AnchorHeadSingle
     6:0.007584810256958008 PointHeadSimple
     7:0.15941095352172852 shared_fc_layer
-    
+
 ## Augment using ImVoteNet
 ### Texture Feature
-<img src="docs/texture_feature.png" align="center" width="80%">
+<img src="docs/texture_feature.png" align="center" width="100%">
 
 ### Semantic Feature
-<img src="docs/semantic_feature.png" align="center" width="80%">
+<img src="docs/semantic_feature.png" align="center" width="100%">
 
 ### Geometric Feature
-<img src="docs/geometric_feature.png" align="center" width="80%">
+<img src="docs/geometric_feature.png" align="center" width="100%">
 
 ## Augment using Polar+Cartesian CNN
 Adding
@@ -81,9 +82,9 @@ Adding
 
 ## Hard case
 ### Limited points Due to obstruction or long distance
-<img src="docs/object_less_5point.png" align="left" width="80%" name="object less than 5 point/LEVEL2">
-<img src="docs/object2_less_5point.png" align="right" width="80%" name="object less than 5 point/LEVEL2">
-<img src="docs/object_less_20point.png.png" align="left" width="80%" name="object less than 20 point">
-<img src="docs/object2_less_20point.png" align="right" width="80%" name="object less than 20 point">
+<img src="docs/object_less_5point.png" align="center" width="100%" name="object less than 5 point/LEVEL2">
+<img src="docs/object2_less_5point.png" align="center" width="100%" name="object less than 5 point/LEVEL2">
+<img src="docs/object_less_20point.png.png" align="center" width="100%" name="object less than 20 point">
+<img src="docs/object2_less_20point.png" align="center" width="100%" name="object less than 20 point">
 
 
