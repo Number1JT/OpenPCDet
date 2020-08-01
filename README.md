@@ -70,7 +70,7 @@ More efficient sampling strategy to speed-up and enhance performance
 <img src="docs/geometric_feature.png" align="center" width="100%">
 
 ## Augment using Polar+Cartesian CNN
-Adding
+<img src="docs/polarcnn.png" align="center" width="50%">
  
 ## Results
 
