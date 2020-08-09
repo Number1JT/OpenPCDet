@@ -75,10 +75,21 @@ More efficient sampling strategy to speed-up and enhance performance
 ## Results
 
 ### Visualize
-Adding
+<img src="docs/vis1.png" align="center" width="50%">
+<img src="docs/vis2.png" align="center" width="50%">
 
 ### Performance
-Adding
+* All models are trained with 8 P100 GPUs using 1/4 training dataset and evaluated on full validation dataset. 
+* 3D mAP of both LEVEL_1(points>5) and LEVEL_2(points >= 1) are evaluated, IoU threshold is 0.7.
+
+|                   model                     | ROI(LEVEL_1) | ROI(LEVEL_2) | RCNN(LEVEL_1) | RCNN(LEVEL_2) | 
+|---------------------------------------------|----------:|:-------:|:-------:|:---------:|
+| Paper(full dataset)                              |_ | _ | 70.30 | 65.36 | 
+| Baseline(20 epoch)                                         | _   | _ | 55 | 51 |
+| + ImVoteNet+PolarCNN+ASPP(50 epoch)  | 68.77 | 63.56 | 72.70 | 67.27 | 
+| + Anchor-Free   | _| _ | _ | _ |
+| + Testing augment   | _| _ | _ | _ |
+
 
 ## Hard case
 ### Limited points Due to obstruction or long distance
