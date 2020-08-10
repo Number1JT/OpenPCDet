@@ -75,8 +75,8 @@ More efficient sampling strategy to speed-up and enhance performance
 ## Results
 
 ### Visualize
-<img src="docs/vis1.png" align="center" width="50%">
-<img src="docs/vis2.png" align="center" width="50%">
+<img src="docs/vis1.png" align="center" width="100%">
+<img src="docs/vis2.png" align="center" width="100%">
 
 ### Performance
 * All models are trained with 8 P100 GPUs using 1/4 training dataset and evaluated on full validation dataset. 
